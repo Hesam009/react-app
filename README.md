@@ -1,70 +1,65 @@
-# Getting Started with Create React App
+**#Project Overview**
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a simple React web application deployed to AWS S3 and served via CloudFront using a CI/CD pipeline powered by GitHub Actions.
 
-## Available Scripts
+**#Features**
 
-In the project directory, you can run:
+Fully automated build & deploy on main branch push
+Hosted on AWS S3 + CloudFront (static website)
+Easy rollback by reverting commits
+Beginner-friendly CI/CD setup
 
-### `npm start`
+**#Prerequisites**
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Before running or deploying this project, make sure you have:
+Node.js and npm installed on your system
+Git installed and configured
+An AWS account with:
+S3 bucket for website hosting
+CloudFront distribution
+IAM user with AmazonS3FullAccess and CloudFrontFullAccess
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**#Project Setup (Local)**
 
-### `npm test`
+Clone the repository:
+git clone https://github.com/hesam009/react-app.git
+cd react-app
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**#CI/CD Pipeline Setup**
 
-### `npm run build`
+GitHub Actions Workflow is located in:
+.github/workflows/deploy.yml
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**Add GitHub Secrets for AWS access:**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
 
-### `npm run eject`
+Go to GitHub → Repository → Settings → Secrets → Actions → New repository secret
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+**Push changes to main branch:**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+git add .
+git commit -m "your commit message"
+git push origin main
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+**GitHub Actions will automatically:**
 
-## Learn More
+Build the app
+Deploy to S3
+Invalidate CloudFront cache
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**CloudFront & S3 Settings**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+S3 bucket: Static website hosting enabled
+CloudFront: Origin points to S3 website endpoint, cache invalidation enabled in GitHub Actions
 
-### Code Splitting
+**Rollback**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+If deployment breaks:
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+git revert <commit-id>
+git push origin main
+GitHub Actions redeploys the previous version automatically
